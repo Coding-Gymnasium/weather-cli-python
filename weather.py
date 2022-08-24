@@ -4,6 +4,8 @@ import sys
 from configparser import ConfigParser
 from urllib import error, parse, request
 
+import style
+
 BASE_WEATHER_API_URL = "http://api.openweathermap.org/data/2.5/weather"
 
 
@@ -16,9 +18,7 @@ def read_user_cli_args():
     parser = argparse.ArgumentParser(
         description="gets weather and temperature information for a city"
     )
-    parser.add_argument(
-        "city", nargs="+", type=str, help="enter the city name"
-    )
+    parser.add_argument("city", nargs="+", type=str, help="enter the city name")
     parser.add_argument(
         "-i",
         "--imperial",
@@ -101,8 +101,14 @@ def display_weather_info(weather_data, imperial=False):
     weather_description = weather_data["weather"][0]["description"]
     temperature = weather_data["main"]["temp"]
 
-    print(f"{city}", end="")
-    print(f"\t{weather_description.capitalize()}", end=" ")
+    style.change_color(style.REVERSE)
+    print(f"{city:^{style.PADDING}}", end="")
+    style.change_color(style.RESET)
+
+    style.change_color(style.RED)
+    print(f"\t{weather_description.capitalize():^{style.PADDING}}", end=" ")
+    style.change_color(style.RESET)
+
     print(f"({temperature}°{'F' if imperial else 'C'})")
 
 
