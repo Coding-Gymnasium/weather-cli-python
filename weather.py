@@ -116,10 +116,11 @@ def display_weather_info(weather_data, imperial=False):
     print(f"{city:^{style.PADDING}}", end="")
     style.change_color(style.RESET)
 
-    color = _select_weather_display_params(weather_id)
+    weather_symbol, color = _select_weather_display_params(weather_id)
 
     style.change_color(color)
-    print(f"\t{weather_description.capitalize():^{style.PADDING}}", end=" ")
+    print(f"\t{weather_symbol}", end=" ")
+    print(f"{weather_description.capitalize():^{style.PADDING}}", end=" ")
     style.change_color(style.RESET)
 
     print(f"({temperature}°{'F' if imperial else 'C'})")
@@ -127,22 +128,22 @@ def display_weather_info(weather_data, imperial=False):
 
 def _select_weather_display_params(weather_id):
     if weather_id in THUNDERSTORM:
-        color = style.RED
+        display_params = ("💥", style.RED)
     elif weather_id in DRIZZLE:
-        color = style.CYAN
+        display_params = ("💧", style.CYAN)
     elif weather_id in RAIN:
-        color = style.BLUE
+        display_params = ("💦", style.BLUE)
     elif weather_id in SNOW:
-        color = style.WHITE
+        display_params = ("⛄️", style.WHITE)
     elif weather_id in ATMOSPHERE:
-        color = style.BLUE
+        display_params = ("🌀", style.BLUE)
     elif weather_id in CLEAR:
-        color = style.YELLOW
+        display_params = ("🔆", style.YELLOW)
     elif weather_id in CLOUDY:
-        color = style.WHITE
+        display_params = ("💨", style.WHITE)
     else:  # In case the API adds new weather codes
-        color = style.RESET
-    return color
+        display_params = ("🌈", style.RESET)
+    return display_params
 
 
 if __name__ == "__main__":
