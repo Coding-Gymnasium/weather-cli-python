@@ -1,7 +1,8 @@
 import argparse
 import json
+import sys
 from configparser import ConfigParser
-from urllib import parse, request
+from urllib import error, parse, request
 
 BASE_WEATHER_API_URL = "http://api.openweathermap.org/data/2.5/weather"
 
@@ -16,10 +17,7 @@ def read_user_cli_args():
         description="gets weather and temperature information for a city"
     )
     parser.add_argument(
-        "city",
-        nargs="+",
-        type=str,
-        help="enter the city name"
+        "city", nargs="+", type=str, help="enter the city name"
     )
     parser.add_argument(
         "-i",
@@ -72,7 +70,11 @@ def get_weather_data(query_url):
     Returns:
         dict: Weather information for a specific city
     """
-    response = request.urlopen(query_url)
+    try:
+        response = request.urlopen(query_url)
+    except error.HTTPError:
+        sys.exit("Can't find weather data for this city")
+
     data = response.read()
     return json.loads(data)
 
